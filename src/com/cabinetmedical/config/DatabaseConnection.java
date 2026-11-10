@@ -3,6 +3,8 @@ package com.cabinetmedical.config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Properties;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,7 +34,7 @@ public class DatabaseConnection {
                 String user = props.getProperty("db.user");
                 String password = props.getProperty("db.password");
 
-                System.out.println("🔗 Tentative de connexion à : " + url);
+                System.out.println(" Tentative de connexion à : " + url);
                 System.out.println("👤 Utilisateur : " + user);
                 
                 // Charger le driver MySQL
@@ -80,7 +82,7 @@ public class DatabaseConnection {
                 return true;
             }
         } catch (SQLException e) {
-            System.err.println("❌ Test de connexion : ÉCHEC - " + e.getMessage());
+            System.err.println(" Test de connexion : ÉCHEC - " + e.getMessage());
         }
         return false;
     }
@@ -90,5 +92,38 @@ public class DatabaseConnection {
         closeConnection();
         connection = null;
         System.out.println("🔄 Connexion réinitialisée.");
+    }
+    
+    // ==================== NOUVELLES MÉTHODES POUR LES STATISTIQUES ====================
+    
+    /**
+     * Exécute une requête SELECT et retourne le ResultSet
+     */
+    public static ResultSet executeQuery(String query) {
+        try {
+            Connection conn = getConnection();
+            Statement stmt = conn.createStatement();
+            return stmt.executeQuery(query);
+        } catch (SQLException e) {
+            System.err.println(" Erreur lors de l'exécution de la requête : " + query);
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    /**
+     * Exécute une requête INSERT, UPDATE ou DELETE
+     * @return le nombre de lignes affectées
+     */
+    public static int executeUpdate(String query) {
+        try {
+            Connection conn = getConnection();
+            Statement stmt = conn.createStatement();
+            return stmt.executeUpdate(query);
+        } catch (SQLException e) {
+            System.err.println("❌ Erreur lors de l'exécution de la mise à jour : " + query);
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

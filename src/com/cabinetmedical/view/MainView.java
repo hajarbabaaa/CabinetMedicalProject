@@ -9,8 +9,13 @@ import javafx.stage.Stage;
 
 public class MainView extends Application {
     
+    // ✅ ZIDNA HAD L'VARIABLE BASH NKHZNIO FIHA STAGE L'ASLIYA
+    private Stage primaryStage;
+    
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage stage) {
+        // ✅ HNA KANHAFDIO STAGE L'ASLIYA
+        this.primaryStage = stage;
         primaryStage.setTitle("🏥 Gestion Cabinet Médical");
         
         // Layout principal
@@ -94,7 +99,7 @@ public class MainView extends Application {
         
         // Bouton Statistiques
         Button btnStats = createMenuButton("📊 STATISTIQUES", "#f39c12");
-        btnStats.setOnAction(e -> showStatistics());
+        btnStats.setOnAction(e -> showStatistics()); // ✅ HADA GHADI Y3YET L MÉTHODE L'JDIDA
         
         // Bouton Quitter
         Button btnQuitter = createMenuButton("🚪 QUITTER", "#95a5a6");
@@ -128,9 +133,6 @@ public class MainView extends Application {
     
     /**
      * Crée un bouton de menu stylisé
-     * @param text Le texte du bouton
-     * @param color La couleur de fond
-     * @return Le bouton configuré
      */
     private Button createMenuButton(String text, String color) {
         Button button = new Button(text);
@@ -141,7 +143,6 @@ public class MainView extends Application {
                          + "-fx-padding: 15;";
         button.setStyle(baseStyle);
         
-        // Effet hover
         button.setOnMouseEntered(e -> {
             button.setStyle(baseStyle + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);");
         });
@@ -153,21 +154,9 @@ public class MainView extends Application {
         return button;
     }
     
+    // ✅ HADI HIYA L'MÉTHODE L'M3DDLA (MS7INA L'ALERT O ZIDNA L'APPEL L'JDID)
     private void showStatistics() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("📊 Statistiques du Cabinet");
-        alert.setHeaderText("Aperçu des données du système");
-        
-        // Ici, vous ajouterez les vraies statistiques
-        String content = "Fonctionnalité à implémenter:\n"
-                       + "• Nombre de patients\n"
-                       + "• Nombre de médecins\n"
-                       + "• Rendez-vous du jour\n"
-                       + "• Revenus totaux\n"
-                       + "\nCette fonctionnalité sera disponible dans la prochaine version.";
-        
-        alert.setContentText(content);
-        alert.showAndWait();
+        StatistiquesView.show(this.primaryStage);
     }
     
     public static void main(String[] args) {
